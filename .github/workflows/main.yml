@@ -1,0 +1,23 @@
+name: Notify Telegram on Merge to Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram Notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          MESSAGE="🎉 A new merge has been made into the *dev* branch in repository ${GITHUB_REPOSITORY} by ${GITHUB_ACTOR}.
+          Commit Message: ${GITHUB_EVENT_HEAD_COMMIT_MESSAGE:-No commit message provided.}"
+
+          curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+               -d "chat_id=${TELEGRAM_CHAT_ID}" \
+               -d "text=${MESSAGE}" \
+               -d "parse_mode=Markdown"
