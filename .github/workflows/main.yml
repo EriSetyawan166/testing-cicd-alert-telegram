@@ -15,8 +15,7 @@ jobs:
       - name: Get Latest Commit Message
         id: get_commit
         run: |
-          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          echo "commit_message=$LAST_COMMIT_MESSAGE" >> $GITHUB_ENV
+          echo "::set-output name=commit_message::$(git log -1 --pretty=%B)"
 
       - name: Send Telegram Notification
         env:
@@ -26,7 +25,7 @@ jobs:
           MESSAGE="🚀 *New Merge to dev in ${GITHUB_REPOSITORY}!*  
           
           🔹 **Merged By**: ${GITHUB_ACTOR}  
-          🔹 **Commit Message**: ${commit_message}
+          🔹 **Commit Message**: ${{ steps.get_commit.outputs.commit_message }}
           🔹 **Commit Hash**: ${GITHUB_SHA}  
 
           🔗 [View Repository](https://github.com/${GITHUB_REPOSITORY}/tree/dev)"
