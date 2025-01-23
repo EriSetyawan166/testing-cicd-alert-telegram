@@ -14,13 +14,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get Latest Commit Message
+      - name: Get Last Commit from Merged Branch
         id: get_commit
         run: |
-          # Get the SHA of the parent commit (the branch being merged)
-          PARENT_SHA=$(git rev-parse HEAD~1)
-          # Get the latest commit message from the merged branch
+          # Get the SHA of the commit before the merge commit
+          PARENT_SHA=$(git rev-parse HEAD~2)
+          
+          # Get the last commit message from the branch that was merged
           COMMIT_MESSAGE=$(git log -1 --format=%B ${PARENT_SHA})
+          
           echo "Commit Message: ${COMMIT_MESSAGE}"
           echo "::set-output name=commit_message::${COMMIT_MESSAGE}"
 
