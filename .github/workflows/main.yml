@@ -9,6 +9,15 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Get Latest Commit Message
+        id: get_commit
+        run: |
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "commit_message=$LAST_COMMIT_MESSAGE" >> $GITHUB_ENV
+
       - name: Send Telegram Notification
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -17,7 +26,7 @@ jobs:
           MESSAGE="🚀 *New Merge to dev in ${GITHUB_REPOSITORY}!*  
           
           🔹 **Merged By**: ${GITHUB_ACTOR}  
-          🔹 **Commit Message**: ${GITHUB_HEAD_COMMIT_MESSAGE:-No commit message provided.}  
+          🔹 **Commit Message**: ${commit_message}
           🔹 **Commit Hash**: ${GITHUB_SHA}  
 
           🔗 [View Repository](https://github.com/${GITHUB_REPOSITORY}/tree/dev)"
