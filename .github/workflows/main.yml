@@ -11,13 +11,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Get Latest Commit Message
-        id: get_commit
-        run: |
-          echo "::set-output name=commit_message::$(git show -s --format=%s)"
 
       - name: Send Telegram Notification
         env:
@@ -27,7 +20,7 @@ jobs:
           MESSAGE="🚀 *New Merge to dev in ${GITHUB_REPOSITORY}!*  
           
           🔹 **Merged By**: ${GITHUB_ACTOR}  
-          🔹 **Commit Message**: ${{ steps.get_commit.outputs.commit_message }}
+          🔹 **Commit Message**: ${{ github.event.commits[0].message }}
           🔹 **Commit Hash**: ${GITHUB_SHA}  
 
           🔗 [View Repository](https://github.com/${GITHUB_REPOSITORY}/tree/dev)"
