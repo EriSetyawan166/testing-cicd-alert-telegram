@@ -11,20 +11,11 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
-      - name: Get Last Commit from Merged Branch
+      - name: Get Latest Commit Message
         id: get_commit
         run: |
-          # Get the SHA of the commit before the merge commit
-          PARENT_SHA=$(git rev-parse HEAD~2)
-          
-          # Get the last commit message from the branch that was merged
-          COMMIT_MESSAGE=$(git log -1 --format=%B ${PARENT_SHA})
-          
-          echo "Commit Message: ${COMMIT_MESSAGE}"
-          echo "::set-output name=commit_message::${COMMIT_MESSAGE}"
+          echo "::set-output name=commit_message::$(git log -1 --pretty=%B | tail -n +2)"
 
       - name: Send Telegram Notification
         env:
