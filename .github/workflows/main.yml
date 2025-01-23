@@ -15,8 +15,7 @@ jobs:
       - name: Get Latest Commit Message
         id: get_commit
         run: |
-          SECOND_LATEST_COMMIT_MESSAGE=$(git log --skip=1 -1 --pretty=%B)
-          echo "::set-output name=commit_message::${SECOND_LATEST_COMMIT_MESSAGE}"
+          echo "::set-output name=commit_message::${{ github.event.commits[1].message }}"
 
       - name: Send Telegram Notification
         env:
