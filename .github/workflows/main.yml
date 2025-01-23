@@ -14,8 +14,13 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          MESSAGE="🎉 A new merge has been made into the *dev* branch in repository ${GITHUB_REPOSITORY} by ${GITHUB_ACTOR}.
-          Commit Message: ${GITHUB_EVENT_HEAD_COMMIT_MESSAGE:-No commit message provided.}"
+          MESSAGE="🚀 *New Merge to dev in ${GITHUB_REPOSITORY}!*  
+          
+          🔹 **Merged By**: ${GITHUB_ACTOR}  
+          🔹 **Commit Message**: ${GITHUB_HEAD_COMMIT_MESSAGE:-No commit message provided.}  
+          🔹 **Commit Hash**: ${GITHUB_SHA}  
+
+          🔗 [View Repository](https://github.com/${GITHUB_REPOSITORY}/tree/dev)"
 
           curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
                -d "chat_id=${TELEGRAM_CHAT_ID}" \
